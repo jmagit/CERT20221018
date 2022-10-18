@@ -1,0 +1,72 @@
+Figura f;
+
+var cond = true;
+
+if(cond)
+	f = new Rectangulo();
+else
+	f = new Circulo();
+
+// ...
+// f = new Profesor();
+
+rslt = f.area();
+
+if(f instanceof Cuadrado)
+// 3
+else if(f instanceof Rectangulo)
+// 2
+else if(f instanceof Circulo)
+	((Circulo)f).radio();
+else 
+// 4
+else if(f instanceof Profesor)
+// 1
+
+Grafico g;
+if(cond)
+	g = new Rectangulo();
+else
+	g = new Profesor();
+
+g.pintate();
+
+if(o instanceof Grafico)
+	((Grafico)o).pintate();
+
+v1. pintate() {}
+v2. pintate(String donde) {}
+v3. pintate(int cuantos, String donde) {}
+v3bis. pintate(String donde, int cuantos) {}
+v4. pintate(int cuantos) {}
+v5. pintate(File fichero) {}
+
+v10. pintate(Figura f) {}
+v11. pintate(Rectangulo f) {}
+
+g.pintate(4);
+g.pintate("aqui", 1);
+g.pintate();
+
+g.pintate((Rectangulo)(new Rectangulo()));
+
+suma(int o1, int o2) {}
+suma(String o1, String o2) {}
+
+
+Figura
+- color()
+Circulo
+- color(int o1)
+
+
+H h = new H();
+P p = new H();
+
+
+h.m();
+p.m();
+
+
+
+
