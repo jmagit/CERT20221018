@@ -1,0 +1,74 @@
+# Java related
+target/**
+*.jar
+*.war
+*.ear
+*.class
+kk/**
+
+# eclipse specific
+*.pydevproject
+#.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+target/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+### STS ###
+HELP.md
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+/Demos/nbproject/private/
+/Demos/dist/
+/Ejercicios/nbproject/private/
+/com.examples.main/nbproject/private/
+/com.examples.utils/nbproject/private/
+/com.examples.domains/nbproject/private/
+/com.examples.contracts/nbproject/private/
+/com.examples.infraestructure/nbproject/private/
+/com.examples.domains.services/nbproject/private/
+/com.examples.utils/dist/
+/com.examples.domains/dist/
+/com.examples.contracts/dist/
+/com.examples.infraestructure/dist/
+/com.examples.domains.services/dist/
+/com.examples.main/dist/
