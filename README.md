@@ -7,7 +7,7 @@
 
 ## Ejercicios
 
-- Juego de “Adivina el número que estoy pensando”, un número del 0 al 100, ya te diré si es mayor o menor que el mío, pero tienes 10 intentos como mucho.
+- Juego de “Adivina el número que estoy pensando”, un número del 1 al 100, ya te diré si es mayor o menor que el mío, pero tienes 10 intentos como mucho.
 
         Scanner teclado = new Scanner(System.in); cad = teclado.nextLine();  
         var rnd = new Random(); num = rnd.nextInt(10);  
