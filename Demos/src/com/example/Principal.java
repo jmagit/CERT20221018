@@ -1,5 +1,17 @@
 package com.example;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Date;
+
+import com.example.enumeraciones.DiasDeLaSemana;
+import com.example.enumeraciones.DiasLaborables;
+import com.example.tipos.Alumno;
+import com.example.tipos.Curso;
+import com.example.tipos.Persona;
+import com.example.tipos.Profesor;
+
 /**
  * Clase principal con las demos del curso
  * 
@@ -9,7 +21,8 @@ package com.example;
  *
  */
 public class Principal {
-
+	public static final PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+	private int instancia = 0;
 	/**
 	 * Punto de arranque de la aplicacion
 	 * 
@@ -17,12 +30,46 @@ public class Principal {
 	 */
 	public static void main(String[] args) {
 		var app = new Principal();
-
-		// System.out.println(app.suma(2, 2));
-		app.flujo();
+		app.instancia = 1;
+		out.println(app.suma(2, 2));
+		app.tipos();
+//		out.println(app.avg(2, 2));
+//		out.println(app.avg(1, 2, 3, 4 , 5));
+//		out.println(app.avg(1));
+//		out.println(app.avg());
 
 	}
 
+	public void tipos() {
+		byte mal = 1;
+		DiasDeLaSemana dia = DiasDeLaSemana.LUNES;
+//		dia = DiasLaborables.LUNES;
+		if(dia == DiasDeLaSemana.DOMINGO) {}
+		// boolean b = switch (dia) { case DiasDeLaSemana.SABADO, DiasDeLaSemana.DOMINGO -> true; default-> false; };
+		
+		Persona persona = new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),null, 2000);
+		// persona.nombre = null;
+//		persona.setFechaNacimiento(LocalDate.parse("2000-01-01"));
+//		persona.setFechaNacimiento("2000-01-01");
+		Date fechaDate = new Date();
+		var s = persona.getNombre().replace("a", "o");
+		Profesor profe = new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),null, 2000);
+		//profe.j
+		Alumno alum = new Alumno(2, "Alum", "Grillo", LocalDate.of(2000, 1, 1),null, 69);
+		alum.addNota(0, 1);
+		System.out.println(alum.getNota(0));
+		alum.getNotas()[0] = -10;
+		out.println(alum.getNota(1));
+		out.println(alum);
+		out.println(profe.equals(alum));
+		out.println("Salarios");
+		Curso curso = new Curso(profe, 3000);
+		out.println(curso.getProfesor().getSalario());
+		profe.setSalario(0);;
+		out.println(curso.getProfesor().getSalario());
+		curso.getProfesor().setSalario(1000);
+		out.println(curso.getProfesor().getSalario());
+	}
 	public void flujo() {
 		int i = 1, rslt = 0;
 		double d = 0;
@@ -238,6 +285,13 @@ public class Principal {
 	 */
 	public int resta(int o1, int o2) {
 		return o1 - o2;
+	}
+	public double avg(int obligatorio, int... valores) {
+		// if(valores.length == 0) return 0;
+		double acumulador = obligatorio;
+		for(double valor: valores)
+			acumulador += valor;
+		return acumulador / (valores.length + 1);
 	}
 
 }

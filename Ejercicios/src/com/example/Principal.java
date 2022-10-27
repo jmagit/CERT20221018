@@ -120,6 +120,53 @@ public class Principal {
 			break;
 		}
 	}
+	
+	public void juegoPiedraPapelTijeraConEnumerados() {
+		enum Elemento { PIEDRA, PAPEL, TIJERA };
+		Elemento[] jugador = new Elemento[2];
+		jugando:
+		while (true) {
+			int i = 0;
+			do {
+				out.println("Jugador " + (i + 1) + ": ");
+				out.println("\tA. Piedra");
+				out.println("\tB. Papel");
+				out.println("\tC. Tijera");
+				out.println("\tS. Salir");
+				out.print("Dame opción: ");
+				String jugada = teclado.nextLine().toUpperCase();
+				switch (jugada) {
+				case "A":
+					jugador[i++] = Elemento.PIEDRA;
+					break;
+				case "B":
+					jugador[i++] = Elemento.PAPEL;
+					break;
+				case "C":
+					jugador[i++] = Elemento.TIJERA;
+					break;
+				case "S":
+					out.println("Salgo del juego");
+					break jugando;
+				default:
+					out.println("Opción incorrecta");
+					break;
+				}
+			} while (i < 2);
+			if (jugador[0].equals(jugador[1])) {
+				out.println("Empate");
+				continue;
+			}
+			if ((jugador[0] == Elemento.PIEDRA && jugador[1] == Elemento.TIJERA)
+					|| "Papel".equals(jugador[0]) && "Piedra".equals(jugador[1])
+					|| "Tijera".equals(jugador[0]) && "Papel".equals(jugador[1])) {
+				out.println("Gana jugador 1, " + jugador[0] + " gana a " + jugador[1]);
+			} else {
+				out.println("Gana jugador 2, " + jugador[1] + " gana a " + jugador[0]);
+			}
+			break;
+		}
+	}
 
 	public void decode(String expresion) {
 		if (expresion == null || "".equals(expresion)
