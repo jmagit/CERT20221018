@@ -3,8 +3,12 @@ package com.example.tipos;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.Optional;
 
-public abstract class Persona implements Cloneable {
+import com.example.exceptions.DemosException;
+import com.example.exceptions.InvalidDataException;
+
+public abstract class Persona implements Cloneable, Grafico {
 	public static final int MAYORIA_DE_EDAD = 18;
 	public final int edadJubilacion;
 	
@@ -12,7 +16,7 @@ public abstract class Persona implements Cloneable {
 	private String nombre = "(anonimo)";
 	private String apellidos;
 	private LocalDate fechaNacimiento;
-	private int edad = -1;
+	private Integer edad = null;
 	private boolean activo = true;
 	private LocalDate fechaBaja;
 	
@@ -60,24 +64,38 @@ public abstract class Persona implements Cloneable {
 	public void setApellidos(String apellidos) {
 		this.apellidos = apellidos;
 	}
+	
+	public boolean hasFechaNacimiento() {
+		return fechaNacimiento != null;
+	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws DemosException No hay fecha de nacimiento
+	 */
 	public LocalDate getFechaNacimiento() {
+		if(fechaNacimiento == null)
+			throw new InvalidDataException("No hay fecha de nacimiento");
 		return fechaNacimiento;
 	}
 
 	private int calculaEdad() {
+		assert fechaNacimiento != null : "Fecha de nacimiento es nulo";
 		return (int) fechaNacimiento.until(LocalDate.now(), ChronoUnit.YEARS);
 	}
 	
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		if(fechaNacimiento == null) {
 			this.fechaNacimiento = null;
-			this.edad = -1;
+			this.edad = null;
+			return;
 		}
 		if(fechaNacimiento.isAfter(LocalDate.now()))
 			throw new IllegalArgumentException("Tiene que haber nacido ya");
 		this.fechaNacimiento = fechaNacimiento;
 		edad = calculaEdad();
+		assert edad >= 0 : "Error calculo de fecha";
 	}
 	public void setFechaNacimiento(String fechaNacimiento) {
 		setFechaNacimiento(LocalDate.parse(fechaNacimiento));
@@ -91,8 +109,9 @@ public abstract class Persona implements Cloneable {
 		this.fechaBaja = fechaBaja;
 	}
 
-	public int getEdad() {
-		return edad;
+	public Optional<Integer> getEdad() {
+//		edad = calculaEdad();
+		return Optional.ofNullable(edad);
 	}
 
 	public boolean isActivo() {
@@ -102,7 +121,9 @@ public abstract class Persona implements Cloneable {
 	protected void setActivo(boolean valor) {
 		activo = valor;
 	}
-	public void jubilate() {
+	public void jubilate() throws DemosException {
+		if(fechaBaja != null)
+			throw new DemosException("Ya está jubilado");
 		fechaBaja = LocalDate.now();
 		activo = false;
 	}

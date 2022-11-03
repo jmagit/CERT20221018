@@ -3,12 +3,18 @@ package com.example.tipos;
 import java.time.LocalDate;
 
 import com.example.Principal;
+import com.example.exceptions.DemosException;
 
 public class Profesor extends Persona {
 	private double salario = 1000.00;
 
 	public Profesor(int id, String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaBaja, double salario) {
 		super(id, nombre, apellidos, fechaNacimiento, fechaBaja, 67);
+		this.salario = salario;
+	}
+
+	public Profesor(int id, String nombre, String apellidos, double salario) {
+		super(id, nombre, apellidos, null, null, 67);
 		this.salario = salario;
 	}
 
@@ -21,7 +27,9 @@ public class Profesor extends Persona {
 	}
 	
 	@Override
-	public void jubilate() {
+	public void jubilate() throws DemosException {
+		if(getFechaBaja() != null)
+			throw new DemosException("Ya esta jubilado");
 		Principal.out.println("Yuhuuu");
 		salario = 0;
 		setActivo(false);
@@ -44,5 +52,10 @@ public class Profesor extends Persona {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public void pintate() {
+		System.out.println("Soy un profe");
 	}
 }

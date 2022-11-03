@@ -28,4 +28,9 @@ public class Alumno extends Persona {
 			throw new IllegalArgumentException("Asignatura fuera de rango");
 		return notas[asignatura];
 	}
+
+	@Override
+	public void pintate() {
+		System.out.println("Soy un alumno");
+	}
 }

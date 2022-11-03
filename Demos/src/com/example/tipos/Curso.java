@@ -1,6 +1,6 @@
 package com.example.tipos;
 
-public class Curso {
+public class Curso implements Grafico {
 	private Profesor profesor;
 
 	public Curso(Profesor profesor, double salario) {
@@ -15,6 +15,11 @@ public class Curso {
 
 	public void setProfesor(Profesor profesor) {
 		this.profesor = profesor;
+	}
+
+	@Override
+	public void pintate() {
+		System.out.println("Soy un curso");
 	}
 	
 	

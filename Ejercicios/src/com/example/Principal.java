@@ -5,6 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.example.juegos.Juego;
+import com.example.juegos.JuegoException;
+
 public class Principal {
 	private static final Scanner teclado = new Scanner(System.in);
 	private static final PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -13,9 +16,18 @@ public class Principal {
 		var app = new Principal();
 //		app.ejer1();
 //		app.juegoNumero();
-		app.juegoPiedraPapelTijera();
+		app.juegoConClase();
+//		app.juegoPiedraPapelTijera();
 //		app.decode("3+4+3,4-7*1=");
 //		app.decode("0,1+0,2+0,7-0,9=");
+//		try {
+//			app.calcula("3+4+3,4-7*10/3+33=");
+//			app.calcula("0,1+0,2+0,7-0,9=");
+//		} catch (CalculadoraException e) {
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void ejer1() {
@@ -66,6 +78,36 @@ public class Principal {
 			out.println("Bieeen!!! Acertaste.");
 		} else {
 			out.println("Upsss! Se acabaron los intentos, el número era el " + numeroBuscado + ".");
+		}
+	}
+
+	public void juegoConClase() {
+		try {
+			Juego<String> juego = new com.example.juegos.numero.JuegoDelNumero();
+			juego.inicializar();
+//			((com.example.juegos.numero.JuegoDelNumero) juego).addNotificaListener(arg -> {
+//				out.println("NOTIFICA: " + arg.getMsg());
+//				out.println("¿Qieres cancelar?:");
+//				arg.setCancel("s".equals(teclado.nextLine()));
+//			});
+			for (int intentos = 1; intentos <= 10; intentos++) {
+				out.print("Dame tu número del 1 al 100 (" + (juego.getJugada() + 1) + " de 10): ");
+				try {
+					juego.jugada(teclado.nextLine());
+                    out.println(juego.getResultado());
+					if (juego.getFinalizado()) {
+						break;
+					}
+				} catch (JuegoException e) {
+					if (e.getCause() instanceof NumberFormatException) {
+						out.println(e.getMessage());
+					} else {
+						throw e;
+					}
+				}
+			}
+		} catch (JuegoException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -199,4 +241,38 @@ public class Principal {
 			}
 		}
 	}
+	public double calcula(String expresion) throws CalculadoraException, Exception {
+		if (expresion == null || "".equals(expresion) || !Character.isDigit(expresion.charAt(0))) {
+			throw new java.lang.IllegalArgumentException("No es una expresión valida");
+		}
+		String operando = "";
+		Calculadora calculadora = new Calculadora();
+		for (int i = 0; i < expresion.length(); i++) {
+			char ch = expresion.charAt(i);
+			if (Character.isDigit(ch)) {
+				operando += ch;
+			} else if (ch == ',') {
+				if (operando.indexOf(ch) == -1) {
+					operando += ch;
+				} else {
+					// throw new Exception("Ya existe separador decimal.");
+				}
+			} else if ("+-*/%=".indexOf(ch) >= 0) {
+				if (operando.endsWith(",")) {
+					operando += "0";
+				}
+				calculadora.calcula(operando, ch);
+				System.out.println(operando + "\t" + ch + "\t" + calculadora.getAcumulado());
+				if (ch == '=') {
+					break;
+				}
+				operando = "";
+			} else if (ch != ' ') {
+//				throw new Exception("Carácter no valido.");
+			}
+		}
+		System.out.println(calculadora.getAcumulado());
+		return calculadora.getAcumulado();
+	}
+
 }

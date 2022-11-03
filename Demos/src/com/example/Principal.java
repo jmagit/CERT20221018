@@ -7,9 +7,15 @@ import java.util.Date;
 
 import com.example.enumeraciones.DiasDeLaSemana;
 import com.example.enumeraciones.DiasLaborables;
+import com.example.exceptions.DemosException;
 import com.example.tipos.Alumno;
 import com.example.tipos.Curso;
+import com.example.tipos.EjemplosGenericos;
+import com.example.tipos.Grafico;
 import com.example.tipos.Persona;
+import com.example.tipos.PersonasRepository;
+import com.example.tipos.PersonasRepositoryImpl;
+import com.example.tipos.PersonasRepositoryMock;
 import com.example.tipos.Profesor;
 
 /**
@@ -30,14 +36,63 @@ public class Principal {
 	 */
 	public static void main(String[] args) {
 		var app = new Principal();
-		app.instancia = 1;
-		out.println(app.suma(2, 2));
-		app.tipos();
+//		app.instancia = 1;
+//		out.println(app.suma(2, 2));
+		try {
+			app.errores();
+			
+		} catch (Exception e) {
+			System.err.println("En el main");
+			e.printStackTrace();
+			System.out.println("Termine con errores ....");
+			System.exit(0);
+		}
+//		app.genericos(new PersonasRepositoryMock());
 //		out.println(app.avg(2, 2));
 //		out.println(app.avg(1, 2, 3, 4 , 5));
 //		out.println(app.avg(1));
 //		out.println(app.avg());
-
+		System.out.println("Termine ....");
+	}
+	public void errores() throws Exception {
+		Persona p = new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),LocalDate.of(2000, 1, 1), 2000);
+		p = new Profesor(1, "Profe", "Grillo", 2000);
+		try {
+			p.jubilate();
+			if(p.getEdad().isPresent())
+				System.out.println(p.getEdad().get());
+			else {
+				System.out.println("Sin edad");
+			}
+		} catch (DemosException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			throw new Exception("Esto fallo", e);
+		}
+		
+	}
+	public void genericos(PersonasRepository dao) {
+		EjemplosGenericos.ElementoInt prov = new EjemplosGenericos.ElementoInt(28, "Madrid");
+		EjemplosGenericos.ElementoChar genero = new EjemplosGenericos.ElementoChar('F', "Femenino");
+//		EjemplosGenericos.Elemento<Character> ele = new EjemplosGenericos.Elemento<Character>('F', "Femenino");
+//		ele = new EjemplosGenericos.Elemento<Integer>(28, "Madrid");
+//		ele = new EjemplosGenericos.Elemento<Integer>("8", "Barcelona");
+//		ele.setKey('a');
+		System.out.println(prov.getKey() + " - " + prov.getValue());
+		EjemplosGenericos.Elemento<Persona> lista = new EjemplosGenericos.Elemento<Persona>( 
+				new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),null, 2000), "Femenino");
+		lista = new EjemplosGenericos.Elemento<Persona>( 
+				new Alumno(2, "Alum", "Grillo", LocalDate.of(2000, 1, 1),null, 69), "Femenino");
+		dao.getAll();
+		EjemplosGenericos.ElementoEntero reg = new EjemplosGenericos.ElementoEntero(28, "Madrid");
+		System.out.println(reg.key() + " - " + reg.value());
+		Object o = 4; // new Integer(4)
+		int i = (int)o; // o.getValue()
+		Integer j = 5;
+		i = i + j;
+//		i = null;
+		j = null;
 	}
 
 	public void tipos() {
@@ -69,6 +124,18 @@ public class Principal {
 		out.println(curso.getProfesor().getSalario());
 		curso.getProfesor().setSalario(1000);
 		out.println(curso.getProfesor().getSalario());
+		Object o = new Principal();
+		Grafico g = profe;
+		g.pintate();
+		g = alum;
+		g.pintate();
+		g = curso;
+		g.pintate();
+		if(o instanceof Grafico gg) {
+			gg.pintate();
+		} else {
+			System.out.println("No lo se pintar");
+		}
 	}
 	public void flujo() {
 		int i = 1, rslt = 0;
