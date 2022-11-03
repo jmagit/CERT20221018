@@ -3,7 +3,9 @@ package com.example;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.Stream;
 
 import com.example.enumeraciones.DiasDeLaSemana;
 import com.example.enumeraciones.DiasLaborables;
@@ -38,15 +40,16 @@ public class Principal {
 		var app = new Principal();
 //		app.instancia = 1;
 //		out.println(app.suma(2, 2));
-		try {
-			app.errores();
-			
-		} catch (Exception e) {
-			System.err.println("En el main");
-			e.printStackTrace();
-			System.out.println("Termine con errores ....");
-			System.exit(0);
-		}
+		app.consultas(new PersonasRepositoryMock());
+//		try {
+//			app.errores();
+//			
+//		} catch (Exception e) {
+//			System.err.println("En el main");
+//			e.printStackTrace();
+//			System.out.println("Termine con errores ....");
+//			System.exit(0);
+//		}
 //		app.genericos(new PersonasRepositoryMock());
 //		out.println(app.avg(2, 2));
 //		out.println(app.avg(1, 2, 3, 4 , 5));
@@ -54,6 +57,12 @@ public class Principal {
 //		out.println(app.avg());
 		System.out.println("Termine ....");
 	}
+	
+	public void consultas(PersonasRepository dao) {
+		var lst = dao.getAll();
+		lst.forEach(System.out::println);
+	}
+
 	public void errores() throws Exception {
 		Persona p = new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),LocalDate.of(2000, 1, 1), 2000);
 		p = new Profesor(1, "Profe", "Grillo", 2000);

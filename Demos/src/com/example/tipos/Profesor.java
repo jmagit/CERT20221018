@@ -18,6 +18,11 @@ public class Profesor extends Persona {
 		this.salario = salario;
 	}
 
+	public Profesor(int id, String nombre, String apellidos, double salario, LocalDate fechaNacimiento) {
+		super(id, nombre, apellidos, fechaNacimiento, null, 67);
+		this.salario = salario;
+	}
+
 	public double getSalario() {
 		return salario;
 	}

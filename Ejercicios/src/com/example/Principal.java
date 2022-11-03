@@ -16,18 +16,18 @@ public class Principal {
 		var app = new Principal();
 //		app.ejer1();
 //		app.juegoNumero();
-		app.juegoConClase();
+//		app.juegoConClase();
 //		app.juegoPiedraPapelTijera();
 //		app.decode("3+4+3,4-7*1=");
 //		app.decode("0,1+0,2+0,7-0,9=");
-//		try {
-//			app.calcula("3+4+3,4-7*10/3+33=");
-//			app.calcula("0,1+0,2+0,7-0,9=");
-//		} catch (CalculadoraException e) {
-//			e.printStackTrace();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			app.calcula("3+4+3,4-7*1=");
+			app.calcula("0,1+0,2+0,7-0,9=");
+		} catch (CalculadoraException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void ejer1() {
