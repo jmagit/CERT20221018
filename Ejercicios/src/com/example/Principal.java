@@ -45,8 +45,8 @@ public class Principal {
 //			e.printStackTrace();
 //		}
 //		app.naipes();
-		app.ajedrez();
-//		app.vending();
+//		app.ajedrez();
+		app.vending();
 	}
 
 	public void ejer1() {
@@ -104,16 +104,16 @@ public class Principal {
 		try {
 			Juego<String> juego = new com.example.juegos.numero.JuegoDelNumero();
 			juego.inicializar();
-//			((com.example.juegos.numero.JuegoDelNumero) juego).addNotificaListener(arg -> {
-//				out.println("NOTIFICA: " + arg.getMsg());
-//				out.println("¿Quieres cancelar?:");
-//				arg.setCancel("s".equals(teclado.nextLine()));
-//			});
+			((com.example.juegos.numero.JuegoDelNumero) juego).addNotificaListener(arg -> {
+				out.println("NOTIFICA: " + arg.getMsg());
+				out.println("¿Quieres cancelar?:");
+				arg.setCancel("s".equals(teclado.nextLine()));
+			});
 			for (int intentos = 1; intentos <= 10; intentos++) {
 				out.print("Dame tu número del 1 al 100 (" + (juego.getJugada() + 1) + " de 10): ");
 				try {
 					juego.jugada(teclado.nextLine());
-                    out.println(juego.getResultado());
+//                    out.println(juego.getResultado());
 					if (juego.getFinalizado()) {
 						break;
 					}

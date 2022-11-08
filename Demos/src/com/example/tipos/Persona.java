@@ -121,6 +121,7 @@ public abstract class Persona implements Cloneable, Grafico {
 	protected void setActivo(boolean valor) {
 		activo = valor;
 	}
+	@Deprecated
 	public void jubilate() throws DemosException {
 		if(fechaBaja != null)
 			throw new DemosException("Ya está jubilado");

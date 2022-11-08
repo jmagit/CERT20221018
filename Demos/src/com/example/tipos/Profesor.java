@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import com.example.Principal;
 import com.example.exceptions.DemosException;
 
+@Autor(nombre = "Yo mismo")
 public class Profesor extends Persona {
+	@Autor(nombre = "Yo mismo")
 	private double salario = 1000.00;
 
 	public Profesor(int id, String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaBaja, double salario) {
@@ -32,6 +34,7 @@ public class Profesor extends Persona {
 	}
 	
 	@Override
+	@Deprecated
 	public void jubilate() throws DemosException {
 		if(getFechaBaja() != null)
 			throw new DemosException("Ya esta jubilado");

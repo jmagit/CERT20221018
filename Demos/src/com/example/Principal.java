@@ -5,12 +5,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 import com.example.enumeraciones.DiasDeLaSemana;
 import com.example.enumeraciones.DiasLaborables;
 import com.example.exceptions.DemosException;
 import com.example.tipos.Alumno;
+import com.example.tipos.Autor;
 import com.example.tipos.Curso;
 import com.example.tipos.EjemplosGenericos;
 import com.example.tipos.Grafico;
@@ -40,6 +42,7 @@ public class Principal {
 		var app = new Principal();
 //		app.instancia = 1;
 //		out.println(app.suma(2, 2));
+//		app.reflexion();
 		app.consultas(new PersonasRepositoryMock());
 //		try {
 //			app.errores();
@@ -57,12 +60,49 @@ public class Principal {
 //		out.println(app.avg());
 		System.out.println("Termine ....");
 	}
-	
-	public void consultas(PersonasRepository dao) {
-		var lst = dao.getAll();
-		lst.forEach(System.out::println);
+
+	public void reflexion() {
+		try {
+			var cmp = "instancia";
+			var metodo = "errores";
+			Class clase = Class.forName("com.example.Principal");
+			Object instancia = clase.newInstance();
+			for (var o : clase.getDeclaredFields()) {
+				System.out.println(o.getName());
+			}
+			var m = clase.getMethod(metodo, null);
+			var fld = clase.getDeclaredField(cmp);
+			fld.setAccessible(true);
+			System.out.println(fld.get(instancia));
+			fld.set(instancia, 99);
+			System.out.println(fld.get(instancia));
+			m.invoke(instancia, null);
+			System.out.println(Profesor.class.getAnnotation(Autor.class).nombre());
+			System.out.println(PersonasRepositoryMock.class.getAnnotation(Autor.class).nombre());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
+	public void cotilla() {
+		System.out.println("Atributo: " + instancia);
+	}
+	private void consultas(PersonasRepository dao) {
+		var lst = dao.getAll();
+		lst.forEach(System.out::println);
+		System.out.println(
+		lst.stream().filter(p -> p instanceof Profesor)
+			.map(p -> (Profesor)p)
+			.filter(p -> p.getSalario() > 0)
+			.mapToDouble(p -> p.getSalario())
+			.average()
+		);
+		
+	}
+
+	@SuppressWarnings("deprecation")
 	public void errores() throws Exception {
 		Persona p = new Profesor(1, "Profe", "Grillo", LocalDate.of(2000, 1, 1),LocalDate.of(2000, 1, 1), 2000);
 		p = new Profesor(1, "Profe", "Grillo", 2000);

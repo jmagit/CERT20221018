@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.example.exceptions.InvalidDataException;
 
+@Autor
 public class PersonasRepositoryMock implements PersonasRepository {
 	private static List<Persona> listado;
 	
