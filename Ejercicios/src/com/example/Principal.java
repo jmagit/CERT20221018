@@ -2,11 +2,25 @@ package com.example;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.example.juegos.Color;
 import com.example.juegos.Juego;
 import com.example.juegos.JuegoException;
+import com.example.juegos.Pieza;
+import com.example.juegos.Tablero;
+import com.example.juegos.ajedrez.Ajedrez;
+import com.example.juegos.ajedrez.Alfil;
+import com.example.juegos.ajedrez.Caballo;
+import com.example.juegos.ajedrez.Dama;
+import com.example.juegos.ajedrez.PromocionEventArgs;
+import com.example.juegos.ajedrez.Torre;
+import com.example.juegos.naipes.BarajaFrancesa;
+import com.example.juegos.naipes.ValorNaipe;
+import com.example.vending.Maquina;
 
 public class Principal {
 	private static final Scanner teclado = new Scanner(System.in);
@@ -20,14 +34,19 @@ public class Principal {
 //		app.juegoPiedraPapelTijera();
 //		app.decode("3+4+3,4-7*1=");
 //		app.decode("0,1+0,2+0,7-0,9=");
-		try {
-			app.calcula("3+4+3,4-7*1=");
-			app.calcula("0,1+0,2+0,7-0,9=");
-		} catch (CalculadoraException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+////			app.calcula("3+4+3,4-7*1=");
+////			app.calcula("0,1+0,2+0,7-0,9=");
+//			app.calculaList("3+4+3,4-7*1=");
+//			app.calculaList("0,1+0,2+0,7-0,9=");
+//		} catch (CalculadoraException e) {
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		app.naipes();
+		app.ajedrez();
+//		app.vending();
 	}
 
 	public void ejer1() {
@@ -87,7 +106,7 @@ public class Principal {
 			juego.inicializar();
 //			((com.example.juegos.numero.JuegoDelNumero) juego).addNotificaListener(arg -> {
 //				out.println("NOTIFICA: " + arg.getMsg());
-//				out.println("¿Qieres cancelar?:");
+//				out.println("¿Quieres cancelar?:");
 //				arg.setCancel("s".equals(teclado.nextLine()));
 //			});
 			for (int intentos = 1; intentos <= 10; intentos++) {
@@ -273,6 +292,166 @@ public class Principal {
 		}
 		System.out.println(calculadora.getAcumulado());
 		return calculadora.getAcumulado();
+	}
+
+    public List<Calculadora.Operacion> decodeToList(String expresion) {
+        if (expresion == null || "".equals(expresion) || !Character.isDigit(expresion.charAt(0))) {
+            throw new java.lang.IllegalArgumentException("No es una expresión valida");
+        }
+        List<Calculadora.Operacion> resulatado = new ArrayList<>();
+        String operando = "";
+        for (int i = 0; i < expresion.length(); i++) {
+            char ch = expresion.charAt(i);
+            if (Character.isDigit(ch)) {
+                operando += ch;
+            } else if (ch == ',') {
+                if (operando.indexOf(ch) == -1) {
+                    operando += ch;
+                } else {
+                    // throw new Exception("Ya existe separador decimal.");
+                }
+            } else if ("+-*/%=".indexOf(ch) >= 0) {
+                if (operando.endsWith(",")) {
+                    operando += "0";
+                }
+                resulatado.add(new Calculadora.Operacion(operando, ch));
+                if (ch == '=') {
+                    break;
+                }
+                operando = "";
+            } else if (ch != ' ') {
+//				throw new Exception("Carácter no valido.");
+            }
+        }
+        return resulatado;
+
+    }
+
+    public void calculaList(String expresion) throws CalculadoraException, Exception {
+        try {
+            var operaciones = decodeToList(expresion);
+            for (Calculadora.Operacion operacion : operaciones) {
+                System.out.println(operacion.getOperando() + " " + operacion.getOperador());
+            }
+            System.out.println((new Calculadora()).calcula(operaciones));
+        } catch (CalculadoraException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void naipes() {
+        var b = new BarajaFrancesa();
+
+        try {
+            System.out.println("Baraja\n-------------------------------");
+            for (var c : b.getCartas()) {
+                System.out.println(c);
+            }
+            System.out.println("\nMazo\n-------------------------------");
+            b.barajar();
+            b.getMazo().forEach(System.out::println);
+            b.reparte(4, 5).forEach(item -> {
+                System.out.println("\nJugador\n-------------------------------");
+                item.forEach(System.out::println);
+            });
+            System.out.println("\nQuedan " + b.getMazo().size());
+            var mano = b.reparte(1, 2);
+            System.out.println("\nQuedan " + b.getMazo().size());
+            b.reparte(4, 5).forEach(item -> {
+                System.out.println("\nJugador\n-------------------------------");
+                item.forEach(System.out::println);
+            });
+            System.out.println("\nQuedan " + b.getMazo().size());
+            mano.forEach(item -> {
+                System.out.println("\nJugador\n-------------------------------");
+                item.forEach(System.out::println);
+            });
+            System.out.println("\nQuedan " + b.getMazo().size());
+            b.apilar(mano.get(0));
+            b.getMazo().forEach(System.out::println);
+            // b.apilar(mano.get(0));
+            // b.apilar(List.of(new NaipeFrances(NaipeFrances.Palos.CORAZONES, (byte)1)));
+            System.out.println("\nQuedan " + b.getMazo().size());
+            System.out.println(ValorNaipe.REINA.valorNumerico);
+            System.out.println(ValorNaipe.toEnum(12));
+        } catch (JuegoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+	public void ajedrez() {
+		Juego<Tablero> juego = new Ajedrez(e -> pidePieza(e));
+		juego.inicializar();
+		do {
+			try {
+				pintaTablero(juego.getResultado());
+				System.out.print("Juegan las " + (((Ajedrez) juego).getTurno() == Color.BLANCO ? "blancas" : "negras")
+						+ ". Dame jugada [CFCF]: ");
+				juego.jugada(teclado.nextLine().toUpperCase());
+			} catch (JuegoException e) {
+				System.out.println(e.getMessage());
+			}
+		} while (!juego.getFinalizado());
+		System.out.println("Juego Finalizado");
+	}
+
+	private void pintaTablero(Tablero t) {
+		for (int f = 8; f > 0; f--) {
+			System.out.print(String.format("%2s ", f));
+			for (int c = 1; c <= 8; c++) {
+				if (t.hayPieza(f, c))
+					System.out.print(String.format("%10s ", t.getPieza(f, c)));
+				else
+					System.out.print(Tablero.colorEscaque(f, c) == Color.BLANCO ? "            " : "-----------");
+			}
+			System.out.println();
+		}
+		for (char c = 'A'; c <= 'H'; c++) {
+			System.out.print(String.format("%8c    ", c));
+		}
+		System.out.println();
+	}
+	
+	private Pieza pidePieza(PromocionEventArgs e) {
+		System.out.print("\t1: Dama\n\t2: Alfil\n\t3: Torre\n\t4: Caballo\n\t5: Cancelar\n"
+				+ "Dame la opción para promocionar el peón " + (e.getColor() == Color.BLANCO ? "blanco: " : "negro:"));
+		switch (Integer.parseInt(teclado.nextLine())) {
+		case 1:
+			return new Dama(e.getColor());
+		case 2:
+			return new Alfil(e.getColor());
+		case 3:
+			return new Torre(e.getColor());
+		case 4:
+			return new Caballo(e.getColor());
+		case 5:
+			e.setCancel(true);
+		default:
+			return null;
+		}
+	}
+
+	private void vending() {
+		var maquina = new Maquina();
+		cotilla(maquina);
+		maquina.vender("1", "1111", 1);
+		maquina.vender("2", "2222", 2);
+		maquina.vender("1", "1111", 3);
+		maquina.vender("2", "2222", 3);
+		cotilla(maquina);
+		maquina.reiniciaCreditos();
+		maquina.reponerTodo();
+		cotilla(maquina);
+	}
+
+	private void cotilla(Maquina maquina) {
+		System.out.println("Saldo");
+		maquina.saldos().forEach(System.out::println);
+		System.out.println("Stock");
+		maquina.stock().forEach(System.out::println);
+		System.out.println("Consumos");
+		maquina.consumos().forEach(System.out::println);
 	}
 
 }
